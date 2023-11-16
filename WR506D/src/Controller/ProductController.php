@@ -8,7 +8,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProductController extends AbstractController
 {
-
       #[Route("/products", name:"product_list")]
 
     public function listProducts(): Response
@@ -29,7 +28,3 @@ class ProductController extends AbstractController
         ]);
     }
 }
-
-
-
-

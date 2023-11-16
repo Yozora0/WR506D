@@ -4,15 +4,13 @@ namespace App\Service;
 
 use Cocur\Slugify\Slugify as cocurSlugify;
 
-class Slugify {
-
+class Slugify
+{
     //-- function de slugify"
-    public function slugify($stringToSlugify){
+    public function slugify($stringToSlugify)
+    {
 
         $slugify = new CocurSlugify();
         return $slugify->slugify($stringToSlugify);
-
     }
-
-
 }
