@@ -8,7 +8,12 @@ api_platform:
             vary: ['Content-Type', 'Authorization', 'Origin']
         extra_properties:
             standard_put: true
+        pagination_items_per_page: 20
+        pagination_client_items_per_page: true
+        page_parameter_name: 'page'
 
     # Configure what formats are supported by the API
     graphql:
-        enabled: true
+        collection:
+            pagination:
+                enabled: true
