@@ -7,19 +7,9 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ApiResource]
-#[ApiResource(security: "is_granted('ROLE_USER')")]
-#[Get]
-#[Put(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
-#[GetCollection]
-#[Post(security: "is_granted('ROLE_ADMIN')")]
 class Category
 {
     #[ORM\Id]
@@ -28,17 +18,17 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
-    #[Assert\Length(min: 2, max: 255)]
-    #[Assert\NotNull]
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Movie::class, inversedBy: 'categories')]
-    private Collection $movies;
+    private Collection $relation;
+
+    #[ORM\ManyToOne(inversedBy: 'categories')]
+    private ?MediaObject $MediaObject = null;
 
     public function __construct()
     {
-        $this->movies = new ArrayCollection();
+        $this->relation = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -61,23 +51,35 @@ class Category
     /**
      * @return Collection<int, Movie>
      */
-    public function getMovies(): Collection
+    public function getRelation(): Collection
     {
-        return $this->movies;
+        return $this->relation;
     }
 
-    public function addMovie(Movie $movie): static
+    public function addRelation(Movie $relation): static
     {
-        if (!$this->movies->contains($movie)) {
-            $this->movies->add($movie);
+        if (!$this->relation->contains($relation)) {
+            $this->relation->add($relation);
         }
 
         return $this;
     }
 
-    public function removeMovie(Movie $movie): static
+    public function removeRelation(Movie $relation): static
     {
-        $this->movies->removeElement($movie);
+        $this->relation->removeElement($relation);
+
+        return $this;
+    }
+
+    public function getMediaObject(): ?MediaObject
+    {
+        return $this->MediaObject;
+    }
+
+    public function setMediaObject(?MediaObject $MediaObject): static
+    {
+        $this->MediaObject = $MediaObject;
 
         return $this;
     }
