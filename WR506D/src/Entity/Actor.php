@@ -27,17 +27,29 @@ class Actor
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotNull]
+    #[Assert\Type('string')]
+    #[Assert\Length(min: 2, max: 255)]
+    #[Assert\Regex(pattern: '/^[A-Z][a-z]+$/')]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotNull]
     #[Assert\Type('string')]
+    #[Assert\Length(min: 2, max: 255)]
+    #[Assert\Regex(pattern: '/^[A-Z][a-z]+$/')]
     private ?string $firstname = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotNull]
+    #[Assert\Type('DateTimeInterface')]
     private ?\DateTimeInterface $dob = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\Type('DateTimeImmutable')]
+    #[Assert\LessThanOrEqual('today')]
+    #[Assert\GreaterThanOrEqual('-120 years')]
     private ?\DateTimeImmutable $createdAt = null;
 
 
@@ -47,9 +59,14 @@ class Actor
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Choice(['Oscars', 'Grammies', 'Festival de Cannes'])]
+    #[Assert\Type('string')]
     private ?string $reward = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Country]
+    #[Assert\Type('string')]
+    #[Assert\Length(min: 2, max: 255)]
+    #[Assert\Regex(pattern: '/^[A-Z][a-z]+$/')]
     private ?string $nationality = null;
 
     #[ORM\ManyToOne(inversedBy: 'actors')]

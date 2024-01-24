@@ -21,42 +21,60 @@ class Movie
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Assert\Positive]
+    #[Assert\Type(type: 'integer')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 255)]
+    #[Assert\Type(type: 'string')]
     private ?string $title = null;
 
     #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'movies')]
     private Collection $actors;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\DateTime]
+    #[Assert\Type(type: 'DateTimeInterface')]
     private ?\DateTimeInterface $release_date = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank]
+    #[Assert\Type(type: 'string')]
+    #[Assert\Length(min: 10)]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Positive]
+    #[Assert\Type(type: 'integer')]
     private ?int $duration = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
+    #[Assert\Range(
+        min: 0,
+        max: 10,
+        notInRangeMessage: 'La note doit être comprise entre {{ min }} et {{ max }}',
+    )]
     private ?float $note = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
+    #[Assert\Positive]
+    #[Assert\Type(type: 'integer')]
     private ?int $entries = null;
 
-    #[ORM\Column]
-    #[Assert\Range(
-        min: 1000000,
-        max: 120000000,
-        notInRangeMessage: 'Le budget doit être compris entre {{ min }} et {{ max }}',
-    )]
+    #[ORM\Column(nullable: true)]
+    #[Assert\Positive]
+    #[Assert\Type(type: 'integer')]
+    #[Assert\Range(min: 0, max: 1000000000)]
     private ?int $budget = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank]
     private ?string $director = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable: true)]
+    #[Assert\Url]
     private ?string $website = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'relation')]
