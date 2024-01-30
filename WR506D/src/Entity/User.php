@@ -49,11 +49,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
     #[ORM\Column]
+    #[Assert\NotBlank(groups: ['user:create'])]
     private ?string $password = null;
     #[Assert\NotBlank(groups: ['user:create'])]
     #[Groups(['user:create', 'user:update'])]
     private ?string $plainPassword = null;
     #[ORM\Column(type: 'json')]
+    #[Groups(['user:read'])]
+    #[Assert\NotBlank]
     private array $roles = [];
 
     public function getId(): ?int
