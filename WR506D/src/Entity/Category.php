@@ -18,20 +18,14 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
-    #[Assert\Length(min: 2, max: 255)]
-    #[Assert\Type(type: 'string')]
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Movie::class, inversedBy: 'categories')]
-    private Collection $relation;
-
-    #[ORM\ManyToOne(inversedBy: 'categories')]
-    private ?MediaObject $MediaObject = null;
+    private Collection $movies;
 
     public function __construct()
     {
-        $this->relation = new ArrayCollection();
+        $this->movies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -54,35 +48,23 @@ class Category
     /**
      * @return Collection<int, Movie>
      */
-    public function getRelation(): Collection
+    public function getMovies(): Collection
     {
-        return $this->relation;
+        return $this->movies;
     }
 
-    public function addRelation(Movie $relation): static
+    public function addMovie(Movie $movie): static
     {
-        if (!$this->relation->contains($relation)) {
-            $this->relation->add($relation);
+        if (!$this->movies->contains($movie)) {
+            $this->movies->add($movie);
         }
 
         return $this;
     }
 
-    public function removeRelation(Movie $relation): static
+    public function removeMovie(Movie $movie): static
     {
-        $this->relation->removeElement($relation);
-
-        return $this;
-    }
-
-    public function getMediaObject(): ?MediaObject
-    {
-        return $this->MediaObject;
-    }
-
-    public function setMediaObject(?MediaObject $MediaObject): static
-    {
-        $this->MediaObject = $MediaObject;
+        $this->movies->removeElement($movie);
 
         return $this;
     }
